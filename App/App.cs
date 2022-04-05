@@ -29,7 +29,7 @@ namespace SongsApp
             Console.WriteLine("\nWhat to play? (artist + track):");
             string searchString = Console.ReadLine();
 
-            string spotifyLink = await Program.musicService.GetSpotifyLinkAsync($"{searchString}");
+            string spotifyLink = await Program.musicService.GetSpotifyLinkAsync(searchString);
             if (spotifyLink.StartsWith("http"))
             {
                 FilesService.OpenFile(spotifyLink);
