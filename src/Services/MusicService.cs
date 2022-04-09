@@ -83,7 +83,7 @@ namespace SongsApp.Services
 
         public async Task<string> GetSongLinkAsync(string searchString)
         {
-            searchString = Regex.Replace(searchString, @"\s+", "%20");
+            searchString = spaceRegex.Replace(searchString, "%20");
             string url = $"https://api.spotify.com/v1/search?q={searchString}&type=track";
 
             var response = await spotifyHttpClient.GetAsync(url);

@@ -12,6 +12,7 @@ Edit configuration to use services (only the lyrics service doesn't require a to
 ![Alt demo](pics/SongsDemo.gif)
 
 <br>
+
 *update: turns out spotify's search also works with lyrics keywords.
 
 <br>
@@ -20,5 +21,7 @@ Edit configuration to use services (only the lyrics service doesn't require a to
 
 I use a beta version of azure's text analytics to get a summary of the song.
 Pretty sure it wasn't meant for this :). Anyway, the results depend heavily on punctuation marks.<br><br>
+
+<br>
 
 ![Alt demo](pics/SongsDemo2.gif)
