@@ -1,7 +1,24 @@
-## Songs-app
+# Songs-app
 
-### Search and play songs from pc or spotify
+## Search + play songs ⋆ files or spotify ⋆ lyrics summary <br><br>
 
-small app to find and play mp3 files / find and open the song's spotify link, and get lyrics.
+- find+play mp3 files
+- find+open song's spotify link
+- get lyrics
+- get song summary (details below)
 
-![Alt demo](SongsDemo.gif)
+Edit configuration to use services (only the lyrics service doesn't require a token currently). <br><br>
+
+![Alt demo](pics/SongsDemo.gif)
+
+<br>
+*update: turns out spotify's search also works with lyrics keywords.
+
+<br>
+
+### lyrics summary
+
+I use a beta version of azure's text analytics to get a summary of the song.
+Pretty sure it wasn't meant for this :). Anyway, the results depend heavily on punctuation marks.<br><br>
+
+![Alt demo](pics/SongsDemo2.gif)
