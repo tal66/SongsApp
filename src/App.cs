@@ -10,10 +10,10 @@ namespace SongsApp
         private IMusicService musicService;
         private IFilesService filesService;
 
-        public App(string musicRootDir, int maxResultsToDisplay, IMusicService musicService, IFilesService filesService)
+        public App(IMusicService musicService, IFilesService filesService)
         {
-            this.musicRootDir = musicRootDir;
-            this.maxResultsToDisplay = maxResultsToDisplay;            
+            this.musicRootDir = Config.musicRootDir;
+            this.maxResultsToDisplay = Config.maxResultsToDisplay;            
             this.musicService = musicService;
             this.filesService = filesService;
         }
@@ -86,12 +86,20 @@ namespace SongsApp
 
                 while (nResults == 0)
                 {
-                    Console.WriteLine("\nWhat to play? (by file keywords):");
+                    Console.WriteLine("\nWhat to play? (file keywords. [empty = random]):");
                     string searchString = Console.ReadLine();
 
                     try
                     {
-                        results = filesService.SearchMp3FilesByPattern(searchString, musicRootDir);
+                        if (string.IsNullOrWhiteSpace(searchString))
+                        {
+                            results = filesService.GetRandomMp3File(musicRootDir);
+                        }
+                        else
+                        {
+                            results = filesService.SearchMp3FilesByPattern(searchString, musicRootDir);
+
+                        }
                     }
                     catch (IOException e)
                     {

@@ -9,6 +9,7 @@ namespace SongsApp.Services
     public interface IFilesService
     {
         string[] SearchMp3FilesByPattern(string searchString, string rootDir);
+        string[] GetRandomMp3File(string rootDir);
         void OpenFile(string filename);
     }
 }

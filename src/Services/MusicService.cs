@@ -15,25 +15,25 @@ namespace SongsApp.Services
         private readonly HttpClient spotifyHttpClient;
         private readonly TextAnalyticsClient? azureClient;
 
-        public MusicService(string spotifyToken)
+        public MusicService()
         {
             TextServiceEnabled = false;
             httpClient = new() { Timeout = TimeSpan.FromSeconds(15) };
             spotifyHttpClient = new() { Timeout = TimeSpan.FromSeconds(15) };
             spotifyHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            spotifyHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", spotifyToken);
-        }
+            spotifyHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Config.spotifyToken);
 
-        public MusicService(string azurePrivateEndpoint, string azurePrivateKey, string spotifyToken) : this(spotifyToken)
-        {
-            try
+            if (Config.azureEnabled)
             {
-                azureClient = new TextAnalyticsClient(new Uri(azurePrivateEndpoint), new AzureKeyCredential(azurePrivateKey));
-                TextServiceEnabled = true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error initiating azureClient (edit config). {ex.Message} ");
+                try
+                {
+                    azureClient = new TextAnalyticsClient(new Uri(Config.azurePrivateEndpoint), new AzureKeyCredential(Config.azurePrivateKey));
+                    TextServiceEnabled = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error initiating azureClient (edit config). {ex.Message} ");
+                }
             }
         }
 

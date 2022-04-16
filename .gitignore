@@ -1,4 +1,5 @@
 App.Development.config
+appsettings.development.json
 other/
 
 # User-specific files

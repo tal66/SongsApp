@@ -1,71 +1,49 @@
-﻿using System.Configuration;
-using SongsApp.Services;
+﻿using SongsApp.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace SongsApp
 {
+
     public class Program
     {
-        private static string musicRootDir;
-        private static string spotifyToken;
-        private static bool azureEnabled;
-        private static string? azurePrivateEndpoint;
-        private static string? azurePrivateKey;
-        static Program()
-        {
-            GetSettings();
-        }
-
         static async Task Main()
         {
-            int maxResultsToDisplay = 15;
-            IMusicService musicService = InitMusicService();
+            Settings();
+            IMusicService musicService = new MusicService();
             IFilesService filesService = new FilesService();
-            
-            App app = new(musicRootDir, maxResultsToDisplay, musicService, filesService);
+            App app = new(musicService, filesService);
 
             while (true)
             {
                 await app.Run();
-                Console.WriteLine("\n*****************************\nRestart..\n");
+                Console.WriteLine("\n******************************************\nRestart..\n");
             }
         }
 
 
-        private static void GetSettings()
+        private static void Settings()
         {
             try
             {
-                var appSettings = ConfigurationManager.AppSettings;
-                musicRootDir = appSettings.Get("musicRootDir");
-                spotifyToken = appSettings.Get("spotifyToken");
-                azureEnabled = appSettings.Get("azureEnabled").Trim().ToLower() == "true";
-                if (azureEnabled)
-                {
-                    azurePrivateEndpoint = appSettings.Get("azurePrivateEndpoint");
-                    azurePrivateKey = appSettings.Get("azurePrivateKey");                    
-                }
+                ConfigurationBuilder builder = new();
+                builder
+                    .AddJsonFile("appsettings.json", true, true)
+                    .AddJsonFile("appsettings.development.json", true, true);
+                var config = builder.Build();
+                
+                Config.maxResultsToDisplay = 15; 
+                Config.musicRootDir = config.GetSection("musicRootDir").Value;               
+                Config.spotifyToken = config.GetSection("spotify:token").Value;
+                Config.azureEnabled = Convert.ToBoolean(config.GetSection("azure:enabled").Value);
+                Config.azurePrivateEndpoint = config.GetSection("azure:privateEndpoint").Value;
+                Config.azurePrivateKey = config.GetSection("azure:privateKey").Value;
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Error reading app settings. {e.Message}");
-                return;
             }
         }
-
-        private static IMusicService InitMusicService()
-        {
-            IMusicService musicService;
-            if (azureEnabled)
-            {
-                musicService = new MusicService(azurePrivateEndpoint, azurePrivateKey, spotifyToken);
-            }
-            else
-            {
-                musicService = new MusicService(spotifyToken);
-            }
-
-            return musicService;
-        }
+      
     }
 }
 
