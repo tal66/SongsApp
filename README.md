@@ -15,7 +15,7 @@ I use a *beta* version of azure's text analytics to get a summary of the song. \
 Pretty sure it wasn't meant for this :). Anyway, the results depend on punctuation marks.
 <br><br>
 
-![Alt demo](pics/SongsDemo.gif)
+![Alt demo](pics/SongsDemo2.gif)
 
 <br>
 
