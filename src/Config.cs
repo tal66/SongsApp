@@ -7,7 +7,9 @@
         public static string spotifyToken;
         public static bool azureEnabled;
         public static string azurePrivateEndpoint;
-        public static string azurePrivateKey;          
+        public static string azurePrivateKey;
+        public static bool redisEnabled;
+        public static string redisEndpoint;
     }
 }
 

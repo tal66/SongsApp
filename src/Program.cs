@@ -11,7 +11,8 @@ namespace SongsApp
             Settings();
             IMusicService musicService = new MusicService();
             IFilesService filesService = new FilesService();
-            App app = new(musicService, filesService);
+            IDb db = new RedisDB();
+            App app = new(musicService, filesService, db);
 
             while (true)
             {
@@ -37,13 +38,14 @@ namespace SongsApp
                 Config.azureEnabled = Convert.ToBoolean(config.GetSection("azure:enabled").Value);
                 Config.azurePrivateEndpoint = config.GetSection("azure:privateEndpoint").Value;
                 Config.azurePrivateKey = config.GetSection("azure:privateKey").Value;
+                Config.redisEnabled = Convert.ToBoolean(config.GetSection("redis:enabled").Value);
+                Config.redisEndpoint = config.GetSection("redis:endpoint").Value;
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Error reading app settings. {e.Message}");
             }
-        }
-      
+        }      
     }
 }
 

@@ -9,13 +9,16 @@ namespace SongsApp
         private int maxResultsToDisplay;
         private IMusicService musicService;
         private IFilesService filesService;
+        private IDb db;
 
-        public App(IMusicService musicService, IFilesService filesService)
+        public App(IMusicService musicService, IFilesService filesService, IDb db)
         {
             this.musicRootDir = Config.musicRootDir;
             this.maxResultsToDisplay = Config.maxResultsToDisplay;            
             this.musicService = musicService;
             this.filesService = filesService;
+            this.db = db;
+
         }
 
         public async Task Run()
@@ -76,8 +79,6 @@ namespace SongsApp
             filesService.OpenFile(results[selectedResultNumber]);
 
             return chosenFile;
-
-            //
 
             string[] AskUserForPatternsAndSearchUntilFound()
             {
@@ -161,7 +162,14 @@ namespace SongsApp
 
             Console.WriteLine("********** Lyrics **********");
 
-            string lyrics = await musicService.GetSongLyricsAsync(song);
+            string key = $"{artist}:{songTitle}";
+            string lyrics = db.Get(key);
+            if (string.IsNullOrWhiteSpace(lyrics))
+            {
+                lyrics = await musicService.GetSongLyricsAsync(song);
+                db.Set(key, lyrics);
+            } 
+      
             song.Lyrics = lyrics;
 
             Console.WriteLine(lyrics);
@@ -189,7 +197,14 @@ namespace SongsApp
 
         private async Task<string> GetAndShowSummary(Song song)
         {
-            string summary = await musicService.GetSongSummaryAsync(song);
+            string key = $"{song.Artist}:{song.Title}:summary";
+            string summary = db.Get(key);
+            if (string.IsNullOrWhiteSpace(summary))
+            {
+                summary = await musicService.GetSongSummaryAsync(song);
+                db.Set(key, summary);
+            }
+
             Console.WriteLine(summary);
             return summary;
         }
